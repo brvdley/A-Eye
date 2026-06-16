@@ -48,7 +48,9 @@ Dark theme, **red accent** (`--accent: #E5392F`) tied to the scrub dial. Layout:
 chat-history rail · resizable split (video ⇄ chat, horizontal/vertical) · global transport bar
 (scrubber w/ thumbnail previews, red dial, transport + speed) · floating rounded prompt input.
 **Signature interaction: bidirectional timestamp sync** — clickable citation chips ⇄ video seek.
-Full spec: [`docs/ui-spec.md`](docs/ui-spec.md).
+**Mode chips** above the input set how A-Eye answers: persona presets (single-select) + capability toggles
+(**Deep Reasoning**, **Web Search**), each a gradient pill — transparent/colored-outline at rest, fills with
+its gradient + white text + glow + thin white border when active. Full spec: [`docs/ui-spec.md`](docs/ui-spec.md).
 
 ## Current status
 

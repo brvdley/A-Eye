@@ -15,7 +15,8 @@ Goal: a **modern, sleek interface that feels like a contemporary AI app**, purpo
 │  rail)   │   └───────────────────┴───────────────────────────┘    │    draggable
 │          │   ╞═══◉ thumbs ════════🔴════════ timestamps ═══════╡    │    divider
 │          │      ⏮  ◀◀   ▶   ▶▶  ⏭        1.0× ▾                     │  ← TRANSPORT BAR
-│          │          ╭───────────────────────────────────╮         │
+│          │     (Research)(Build)(Plain)(Learn) ┊ (Reason)(Search)  │  ← MODE CHIPS
+│          │          ╭───────────────────────────────────╮         │    (glow + white border)
 │          │          │  Ask about this video…          ↑ │         │  ← INPUT (floating,
 │          │          ╰───────────────────────────────────╯         │    rounded, centered)
 └──────────┴───────────────────────────────────────────────────────┘
@@ -44,6 +45,69 @@ Global video controls, spanning both panes:
 - Placeholder reflects context: *"Ask about this video…"*.
 - Send button + attach (load video) affordance; supports multi-line + streaming responses.
 - **Two ways to load a video:** drop/attach a local file, **or paste a video URL** (YouTube/Vimeo/web). When the input detects a pasted link with no video loaded yet, it switches to an "Analyze this link" action and shows download/ingest progress (resolved via `yt-dlp` — see [architecture.md](architecture.md)).
+
+### 5. Mode chips (above the input)
+
+A row of small, glowing **pill chips** sits just above the input. They set *how*
+A-Eye answers the next prompt. Two groups, separated by a thin divider (`┊`):
+
+- **Persona presets — single-select** (pick one, or none = default). Each is a
+  system-prompt preset (see [vision.md](vision.md) → personas):
+  *Researcher · Builder · Plain-language · Learner.*
+- **Capabilities — independent toggles** (stack freely):
+  *Deep Reasoning · Web Search.* These lean on provider features — see
+  [providers.md](providers.md) and [architecture.md](architecture.md):
+  - **Deep Reasoning** — spend more thinking on the answer (cloud: adaptive
+    thinking at higher effort, with the reasoning surfaced; local: a slower,
+    more deliberate pass). Trades latency/cost for depth.
+  - **Web Search** — let the answer go *beyond* the video to research topics,
+    visuals, or claims it mentions (cloud: the provider's server-side search
+    tool with citations; local: a pluggable search backend, later). **Note:**
+    this sends queries off-machine, so it's gated like any cloud feature.
+
+#### Chip styling — outline at rest, fills + glows when active
+
+Each chip is a rounded-full pill that lives in **two states**, with a smooth
+transition between them:
+
+- **Idle (unselected):** **transparent** — the dark UI shows straight through.
+  Only a **1px outline in the chip's hue** and a **label in that same hue**. No
+  fill, no glow (or the faintest hint). Reads as a colored ghost button.
+- **Active (selected):** the pill **fills with its gradient**, the **label
+  crossfades to white** (legible on the bright fill), a **soft outer glow** in the
+  hue ramps up, and a **thin white-ish border** appears so the filled pill pops
+  against the dark canvas.
+
+**The click transition is the moment.** On select (~180–220ms `ease-out`): the
+gradient fill grows in (opacity + subtle scale), the glow fades up, the outline
+warms from hue → white, and the text color crossfades hue → white. Deselect
+reverses it. `prefers-reduced-motion` → instant state swap, no ramp/pulse.
+
+| Chip | Hue | Gradient fill (from → to) | Outline + idle text | Glow (active) |
+|------|-----|----------------------------|---------------------|---------------|
+| Researcher | Blue | `#60A5FA → #3B82F6` | `#60A5FA` | `#3B82F6` |
+| Builder | Orange | `#FB923C → #F97316` | `#FB923C` | `#F97316` |
+| Plain-language | Green | `#34D399 → #10B981` | `#34D399` | `#10B981` |
+| Learner | Purple | `#C084FC → #A855F7` | `#C084FC` | `#A855F7` |
+| Deep Reasoning | Rose/Red | `#FF6B6B → #EF4444` | `#FF6B6B` | `#EF4444` |
+| Web Search | Cyan | `#22D3EE → #06B6D4` | `#22D3EE` | `#06B6D4` |
+
+Shared tokens:
+- Idle: `background: transparent` · `border: 1px solid <hue>` · `color: <hue>` · no shadow.
+- Active: gradient `<from> → <to>` fill · `color: #FFFFFF` · `border: 1px solid rgba(255,255,255,0.85)` · `box-shadow: 0 0 14px <glow>66, 0 0 4px <glow>40`.
+- Hover (idle): nudge the outline/text toward the brighter `from` hue and add a faint `0 0 6px <glow>33` glow as an affordance.
+- Radius: full pill · small label, optional leading icon.
+
+> **Decision to confirm:** Deep Reasoning uses a **rose/red** gradient (`#EF4444`),
+> deliberately a touch off the brand scrub-dial red (`#E5392F`) so the two don't
+> read as the same thing. If you'd rather keep red exclusively for the brand /
+> transport, Deep Reasoning can move to **amber** (`#F59E0B`) and Web Search stays
+> cyan. Flagging it rather than silently overloading red.
+
+> **Provider gating:** when a capability needs a provider the current setup can't
+> serve well (e.g. Web Search, or high-quality Deep Reasoning on a local-only
+> setup), the chip shows a subtle "needs a model/key" hint rather than failing
+> mid-answer. See [providers.md](providers.md).
 
 ## Signature interaction — bidirectional timestamp sync
 
@@ -79,8 +143,9 @@ This is A-Eye's defining behavior, not a nice-to-have:
 - `VideoView` (player surface)
 - `TransportBar` → `Scrubber` (thumb previews, red dial), `TransportControls`, `SpeedControl`
 - `ChatThread` → `Message`, `TimestampChip` (clickable seek)
+- `ModeChipBar` → `ModeChip` (gradient + glow + white border; persona single-select group + capability toggles)
 - `PromptInput` (floating pill)
-- `PersonaSwitcher`, `ThemeToggle`
+- `ThemeToggle`
 
 ## Accessibility
 

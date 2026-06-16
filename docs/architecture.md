@@ -62,6 +62,13 @@ explicit opt-in that sends frames + transcript to the provider. Extract and
 Transcribe are always local. Full detail — model options, the privacy contract,
 and key-security rules — in [providers.md](providers.md).
 
+Two optional **capabilities** also route through the provider, surfaced as mode
+chips by the input (see [ui-spec.md](ui-spec.md)): **Deep Reasoning** (cloud:
+adaptive thinking at higher effort; local: a slower deliberate pass) and **Web
+Search** (cloud: the provider's server-side search tool with citations, to
+research beyond the video; local: a pluggable search backend, later). Web Search
+sends queries off-machine and is gated like any cloud feature.
+
 ## VRAM budget (10 GB reference card)
 
 | Stage | Model | Approx VRAM | Resident with chat? |

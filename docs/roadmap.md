@@ -34,6 +34,9 @@ The engine before the interface. Prove video → understanding → answer.
 - [ ] BYOK cloud providers: `AnthropicProvider` (Claude) + `OpenAIProvider` (GPT) behind the provider interface; key stored backend-side, never committed/logged
 - [ ] Settings UI for keys + per-role provider selection (local vs cloud); clear "cloud" badge when active
 - [ ] Persona presets (Researcher / Builder / Accessibility / Learner) as system prompts
+- [ ] **Mode chips** above the input: persona single-select + capability toggles, with the gradient/glow/white-border styling (see ui-spec)
+- [ ] **Deep Reasoning** capability (cloud: adaptive thinking + higher effort, surfaced; local: deliberate pass)
+- [ ] **Web Search** capability (cloud: provider server-side search w/ citations) — research beyond the video
 - [ ] Multi-turn conversation with retrieval for long videos
 - [ ] "Ask about this moment" (frame-grounded follow-ups)
 - [ ] Chapter summaries / auto-outline
@@ -46,6 +49,7 @@ The engine before the interface. Prove video → understanding → answer.
 - [ ] Contributor docs, example videos, demo GIF for README
 
 ## Backlog / ideas
+- Local Web Search backend (e.g. SearXNG / search API) so the capability works without a cloud key
 - Diarization (who's speaking)
 - Export analysis (Markdown/PDF) with timestamped citations
 - Batch / playlist analysis

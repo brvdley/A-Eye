@@ -40,6 +40,21 @@ Providers are selectable **per role**, so a user can keep vision local and route
 only the heavy reasoning to Claude, or send both to the cloud. The Extract and
 Transcribe stages never go through a provider — they're always local.
 
+## Capabilities (Deep Reasoning, Web Search)
+
+Two optional capabilities, exposed as **mode chips** by the input box (see
+[ui-spec.md](ui-spec.md) → Mode chips), are also routed through the provider:
+
+| Capability | Cloud (Claude / GPT) | Local (Ollama) |
+|------------|----------------------|----------------|
+| **Deep Reasoning** | Adaptive thinking at higher **effort**, with the reasoning summary surfaced. Trades latency + tokens for depth. | A slower, more deliberate pass (or a reasoning-tuned local model) — quality capped by the 10 GB GPU. |
+| **Web Search** | The provider's **server-side web-search tool** — Claude/GPT search the web and return cited results. Lets answers go *beyond* the video to research the topics/visuals/claims it mentions. | Pluggable search backend (e.g. SearXNG / a search API) — a later enhancement, not in the first cut. |
+
+**Privacy for Web Search:** it sends queries off the machine (to the provider or
+a search backend), so it's gated like any other cloud feature — off by default,
+clearly flagged when on. Deep Reasoning on a cloud provider inherits the same
+data-leaves-the-machine contract as the rest of the cloud path.
+
 ## Claude (Anthropic) options
 
 Claude models are multimodal (accept images, so they can caption keyframes) and
