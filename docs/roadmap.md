@@ -6,7 +6,7 @@ Phased so each stage is runnable before the next begins. Vision and UI are docum
 - [x] License (Apache-2.0), NOTICE, README, .gitignore
 - [x] Docs: vision, architecture, UI spec, roadmap
 - [x] `.claude/` + `CLAUDE.md` for future sessions
-- [ ] Git init + first push to GitHub
+- [x] Git init + first push to GitHub
 - [ ] `pyproject.toml` / `requirements.txt` skeleton
 
 ## Phase 1 — Core pipeline (CLI, headless)
