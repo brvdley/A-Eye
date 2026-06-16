@@ -46,6 +46,7 @@ The engine before the interface. Prove video → understanding → answer.
 - [ ] Settings: model/quant selection, CPU-offload toggle
 - [ ] Tauri (or Electron) wrap → native installer
 - [ ] Performance pass (indexing speed, VRAM management)
+- [ ] GPU acceleration for faster-whisper (cuBLAS + cuDNN for CUDA 12; currently falls back to CPU when absent)
 - [ ] Contributor docs, example videos, demo GIF for README
 
 ## Backlog / ideas

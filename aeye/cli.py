@@ -68,5 +68,30 @@ def extract(
     rprint(f"  workdir:   {ext.workdir}")
 
 
+@app.command()
+def transcribe(
+    source: str = typer.Argument(
+        ..., help="Local file path, or a video URL (YouTube/Vimeo/...)."
+    ),
+) -> None:
+    """Ingest + extract + transcribe; print the timestamped transcript."""
+    from .extract import extract as extract_video
+    from .transcribe import transcribe as transcribe_audio
+
+    try:
+        src = ingest_video(source)
+        ext = extract_video(src)
+        segments = transcribe_audio(ext.audio_path)
+    except (FileNotFoundError, ValueError, RuntimeError) as exc:
+        rprint(f"[red]✗[/] {exc}")
+        raise typer.Exit(code=1) from exc
+
+    rprint(f"[green]✓[/] [bold]{src.title or src.path.name}[/] — {len(segments)} segments")
+    for seg in segments[:20]:
+        rprint(f"  [dim]{seg.start:6.1f}–{seg.end:5.1f}[/] {seg.text}")
+    if len(segments) > 20:
+        rprint(f"  [dim]… {len(segments) - 20} more[/]")
+
+
 if __name__ == "__main__":
     app()
