@@ -14,7 +14,8 @@ The engine before the interface. Prove video → understanding → answer.
 - [ ] `ingest.py` — source resolver: local file passthrough + `yt-dlp` URL download (YouTube/Vimeo/web) with captions/metadata; graceful failure on DRM/gated links
 - [ ] `extract.py` — ffmpeg demux, PySceneDetect keyframes, thumbnails + WebVTT, subtitle extraction
 - [ ] `transcribe.py` — faster-whisper timestamped transcript
-- [ ] `vision.py` — Qwen2.5-VL keyframe captioning + OCR
+- [ ] `providers/` — provider interface for the See/Chat stages, with the local `OllamaProvider` first (cloud providers come in Phase 3)
+- [ ] `vision.py` — keyframe captioning + OCR via the provider interface
 - [ ] `index.py` — assemble timestamped structured document (+ caching)
 - [ ] `chat.py` — single-turn Q&A over the indexed doc with timestamp citations
 - [ ] `cli.py` — `aeye analyze <video>` then ask a question
@@ -29,7 +30,9 @@ The engine before the interface. Prove video → understanding → answer.
 - [ ] **Bidirectional timestamp sync** (clickable citations ⇄ seek)
 - [ ] `ChatHistoryRail` with persisted sessions
 
-## Phase 3 — Depth & personas
+## Phase 3 — Depth, personas & cloud providers
+- [ ] BYOK cloud providers: `AnthropicProvider` (Claude) + `OpenAIProvider` (GPT) behind the provider interface; key stored backend-side, never committed/logged
+- [ ] Settings UI for keys + per-role provider selection (local vs cloud); clear "cloud" badge when active
 - [ ] Persona presets (Researcher / Builder / Accessibility / Learner) as system prompts
 - [ ] Multi-turn conversation with retrieval for long videos
 - [ ] "Ask about this moment" (frame-grounded follow-ups)

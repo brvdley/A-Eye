@@ -52,6 +52,16 @@ The pipeline runs **once per video** (the "index" pass) to produce a compact, ti
    - The user prompts against the indexed document. Answers cite timestamps.
    - **Qwen2.5-VL can serve as both the "See" and "Chat" model** — it reasons over visuals and text — collapsing the model count and letting chat re-inspect specific frames on demand.
 
+### Model providers (local-first, cloud-optional)
+
+The **See** and **Chat** stages go through a **provider abstraction**
+(`aeye/providers/`), so they can run on the local Ollama model (default) **or**,
+with a user-supplied API key, on **Claude or GPT** (both multimodal — a cloud key
+can serve See *and* Chat). Default stays 100% local and private; cloud is an
+explicit opt-in that sends frames + transcript to the provider. Extract and
+Transcribe are always local. Full detail — model options, the privacy contract,
+and key-security rules — in [providers.md](providers.md).
+
 ## VRAM budget (10 GB reference card)
 
 | Stage | Model | Approx VRAM | Resident with chat? |
@@ -68,6 +78,7 @@ With 32 GB system RAM there's headroom to spill a larger (14B) model partly to C
 |-------|--------|-----|
 | Backend | **Python + FastAPI** | Whisper, Qwen-VL, ffmpeg orchestration live in Python |
 | Model serving | **Ollama** (primary) / vLLM (optional) | Easy local pulls; weights never committed |
+| Cloud providers (opt-in) | **Anthropic** / **OpenAI** SDKs, BYOK | Optional frontier See/Chat via the user's key — see [providers.md](providers.md) |
 | Media | **FFmpeg** + **PySceneDetect** | Demux, keyframes, thumbnails |
 | Sources | **yt-dlp** | Resolve YouTube/Vimeo/web links to local files (+ captions, metadata) |
 | Frontend | **React + Vite + TailwindCSS + shadcn/ui** | Modern, sleek AI-app UI |
@@ -91,9 +102,10 @@ aeye/
 │   ├── ingest.py         # yt-dlp URL resolver / local-file source
 │   ├── extract.py        # ffmpeg + scene detect + thumbnails
 │   ├── transcribe.py     # faster-whisper
-│   ├── vision.py         # Qwen2.5-VL captioning + OCR
+│   ├── vision.py         # See stage: captioning + OCR (via a provider)
 │   ├── index.py          # assemble timestamped doc
-│   ├── chat.py           # Q&A over the cached doc
+│   ├── chat.py           # Chat stage: Q&A over the cached doc (via a provider)
+│   ├── providers/        # Ollama (local) / Anthropic / OpenAI behind one interface
 │   └── server.py         # FastAPI app
 ├── frontend/             # React + Vite + Tailwind + shadcn/ui
 ├── docs/                 # this folder

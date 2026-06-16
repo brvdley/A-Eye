@@ -28,6 +28,7 @@ Plenty of tools can "chat with a video" — but almost all of them are **cloud-b
 - **It runs 100% locally.** Your videos and questions never leave your machine.
 - **It fuses three signals** — vision + audio + text/subtitles — into one timestamped understanding you can question.
 - **Any source.** Load a local file *or* paste a **YouTube / Vimeo / web video link** (1000+ sites via `yt-dlp`) — links are downloaded locally, then analyzed exactly like any other video.
+- **Local by default, your choice to go bigger.** Runs fully local out of the box; optionally **bring your own Claude or GPT API key** to route the analysis to a frontier model (BYOK). Cloud is opt-in and clearly flagged — see [`docs/providers.md`](docs/providers.md).
 
 ### Who it's for
 
@@ -81,6 +82,7 @@ python -m aeye serve            # opens http://localhost:8000
 
 - [`docs/vision.md`](docs/vision.md) — what A-Eye is and who it serves
 - [`docs/architecture.md`](docs/architecture.md) — the pipeline, models, and stack
+- [`docs/providers.md`](docs/providers.md) — local-first models + optional BYOK cloud (Claude / GPT)
 - [`docs/ui-spec.md`](docs/ui-spec.md) — the interface design and theme
 - [`docs/roadmap.md`](docs/roadmap.md) — phased build plan
 

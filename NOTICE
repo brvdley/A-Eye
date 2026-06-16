@@ -21,3 +21,11 @@ A-Eye uses yt-dlp to download the video to the local machine for analysis.
 The user is solely responsible for ensuring such downloads comply with the
 source platform's Terms of Service and applicable copyright law. A-Eye does
 not circumvent DRM or access controls.
+
+Optional cloud model providers (BYOK): A-Eye runs fully locally by default. A
+user may optionally supply their own Claude (Anthropic) or GPT (OpenAI) API key
+to route the analysis/chat stages to that provider. When enabled, video frames,
+transcripts, and prompts for those stages are transmitted to the chosen provider
+and are subject to that provider's terms and pricing. A-Eye stores such keys
+locally only and does not transmit them anywhere except to the provider's own
+API.

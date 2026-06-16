@@ -34,6 +34,8 @@ Full detail in [`docs/vision.md`](docs/vision.md). **Keep docs in sync with real
 - **index** — assemble one timestamped structured doc (cached per video).
 - **chat** — Q&A over the doc; answers cite timestamps. Qwen2.5-VL can be both "see" and "chat".
 
+**Providers (local-first, cloud-optional).** See/Chat go through `aeye/providers/`: `OllamaProvider` (local, default) or, with a user key (**BYOK**), `AnthropicProvider` (Claude) / `OpenAIProvider` (GPT) — both multimodal. Default is 100% local; cloud is opt-in and sends frames+transcript to the provider. **Key rules: backend-only, never in the frontend, never committed (`.env*` gitignored), never logged.** Current Claude IDs: `claude-opus-4-8` (default cloud pick), `claude-sonnet-4-6`, `claude-haiku-4-5`, `claude-fable-5`. Full detail: [`docs/providers.md`](docs/providers.md). When writing Claude code, consult the claude-api skill (stream responses; pass frames as image blocks).
+
 ## Stack
 
 - Backend: **Python 3.11+ / FastAPI**. Models via **Ollama**. Media via **FFmpeg + PySceneDetect**. URL ingest via **yt-dlp**.

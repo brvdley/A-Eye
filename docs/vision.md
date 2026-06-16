@@ -38,11 +38,11 @@ These are **system-prompt presets over one engine**, not separate products:
 
 - Not real-time / live-stream analysis. It indexes a video first, then chat is instant.
 - Not frame-perfect. It samples keyframes, so sub-second visual events between samples can be missed.
-- Not a cloud service. No accounts, no upload, no telemetry.
+- Not a cloud service. No accounts, no telemetry. (A user *may* opt into a cloud model with their own API key, but the product itself hosts nothing.)
 
 ## Guiding principles
 
-1. **Local-first and private by default.** Nothing leaves the machine.
+1. **Local-first and private by default.** Nothing leaves the machine — unless the user explicitly opts into a cloud model with their own API key (BYOK), in which case the relevant data for that stage is sent to their chosen provider. The default ships fully local. See [providers.md](providers.md).
 2. **It watches, it doesn't just read.** Visuals are first-class.
 3. **Every answer is grounded.** Cite timestamps; make them clickable.
 4. **Runs on a real person's GPU.** Designed around a 10 GB consumer card, not a datacenter.
