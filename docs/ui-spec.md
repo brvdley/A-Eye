@@ -89,7 +89,7 @@ reverses it. `prefers-reduced-motion` → instant state swap, no ramp/pulse.
 | Builder | Orange | `#FB923C → #F97316` | `#FB923C` | `#F97316` |
 | Plain-language | Green | `#34D399 → #10B981` | `#34D399` | `#10B981` |
 | Learner | Purple | `#C084FC → #A855F7` | `#C084FC` | `#A855F7` |
-| Deep Reasoning | Rose/Red | `#FF6B6B → #EF4444` | `#FF6B6B` | `#EF4444` |
+| Deep Reasoning | Amber | `#FBBF24 → #F59E0B` | `#FBBF24` | `#F59E0B` |
 | Web Search | Cyan | `#22D3EE → #06B6D4` | `#22D3EE` | `#06B6D4` |
 
 Shared tokens:
@@ -98,11 +98,9 @@ Shared tokens:
 - Hover (idle): nudge the outline/text toward the brighter `from` hue and add a faint `0 0 6px <glow>33` glow as an affordance.
 - Radius: full pill · small label, optional leading icon.
 
-> **Decision to confirm:** Deep Reasoning uses a **rose/red** gradient (`#EF4444`),
-> deliberately a touch off the brand scrub-dial red (`#E5392F`) so the two don't
-> read as the same thing. If you'd rather keep red exclusively for the brand /
-> transport, Deep Reasoning can move to **amber** (`#F59E0B`) and Web Search stays
-> cyan. Flagging it rather than silently overloading red.
+> **Decision:** Deep Reasoning uses **amber** (`#FBBF24 → #F59E0B`) so that red
+> stays exclusive to the brand / transport (the scrub dial, `#E5392F`). No chip
+> reuses the brand red.
 
 > **Provider gating:** when a capability needs a provider the current setup can't
 > serve well (e.g. Web Search, or high-quality Deep Reasoning on a local-only
