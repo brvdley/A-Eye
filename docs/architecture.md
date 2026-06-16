@@ -6,21 +6,30 @@ A-Eye targets a **single consumer GPU with ~10 GB of VRAM** (reference machine: 
 
 The pipeline runs **once per video** (the "index" pass) to produce a compact, timestamped document. Chat then operates over that cached document, keeping only the chat-capable model resident — so conversation is fast.
 
+**Input is a local file *or* a pasted URL.** A leading **ingest** stage resolves a YouTube/Vimeo/web link to a local file with `yt-dlp`; everything downstream is identical regardless of source.
+
 ## Pipeline
 
 ```
-┌───────────┐   ┌─────────────┐   ┌─────────────┐   ┌──────────┐   ┌────────┐
-│  EXTRACT  │──▶│ TRANSCRIBE  │──▶│     SEE     │──▶│  INDEX   │──▶│  CHAT  │
-└───────────┘   └─────────────┘   └─────────────┘   └──────────┘   └────────┘
- ffmpeg          faster-whisper     Qwen2.5-VL-7B     assemble        Qwen2.5-VL
- PySceneDetect   large-v3-turbo     captions + OCR    structured      (or text LLM)
- keyframes,      timestamps         on keyframes      timestamped     over cached
- thumbnails,     + embedded subs                      doc + embeds    doc
- audio demux
-   CPU             ~2–4 GB VRAM       ~6–8 GB VRAM      CPU             ~6–8 GB VRAM
+┌──────────┐   ┌───────────┐   ┌─────────────┐   ┌─────────────┐   ┌──────────┐   ┌────────┐
+│  INGEST  │──▶│  EXTRACT  │──▶│ TRANSCRIBE  │──▶│     SEE     │──▶│  INDEX   │──▶│  CHAT  │
+└──────────┘   └───────────┘   └─────────────┘   └─────────────┘   └──────────┘   └────────┘
+ yt-dlp /        ffmpeg          faster-whisper     Qwen2.5-VL-7B     assemble        Qwen2.5-VL
+ local file      PySceneDetect   large-v3-turbo     captions + OCR    structured      (or text LLM)
+ → local .mp4    keyframes,      timestamps         on keyframes      timestamped     over cached
+ + platform      thumbnails,     + embedded subs                      doc + embeds    doc
+   captions/      audio demux
+   metadata
+   net/CPU          CPU            ~2–4 GB VRAM       ~6–8 GB VRAM      CPU             ~6–8 GB VRAM
 ```
 
 ### Stages
+
+0. **Ingest** (`aeye/ingest.py`) — source resolver, net/CPU.
+   - **Local file:** used as-is.
+   - **URL** (YouTube, Vimeo, 1000+ sites): downloaded locally with `yt-dlp`. Also fetches **platform captions** and **metadata** (title, description, chapters) when available — extra text signal for the Index stage.
+   - Fails gracefully on DRM-protected / geo- or age-gated links that can't be retrieved.
+   - **ToS/copyright:** downloading is the user's responsibility; A-Eye doesn't bypass DRM. See [`NOTICE`](../NOTICE).
 
 1. **Extract** (`aeye/extract.py`) — CPU only.
    - Demux audio for transcription.
@@ -36,7 +45,7 @@ The pipeline runs **once per video** (the "index" pass) to produce a compact, ti
    - Strong OCR + sequence understanding is exactly why this model was chosen.
 
 4. **Index** (`aeye/index.py`) — CPU.
-   - Merge transcript + captions + OCR + subtitles + metadata into one **timestamped structured document**.
+   - Merge transcript + captions + OCR + subtitles + platform metadata into one **timestamped structured document**.
    - Optionally embed chunks for retrieval on long videos.
 
 5. **Chat** (`aeye/chat.py`).
@@ -60,6 +69,7 @@ With 32 GB system RAM there's headroom to spill a larger (14B) model partly to C
 | Backend | **Python + FastAPI** | Whisper, Qwen-VL, ffmpeg orchestration live in Python |
 | Model serving | **Ollama** (primary) / vLLM (optional) | Easy local pulls; weights never committed |
 | Media | **FFmpeg** + **PySceneDetect** | Demux, keyframes, thumbnails |
+| Sources | **yt-dlp** | Resolve YouTube/Vimeo/web links to local files (+ captions, metadata) |
 | Frontend | **React + Vite + TailwindCSS + shadcn/ui** | Modern, sleek AI-app UI |
 | Motion / icons | **Framer Motion**, **Lucide** | Polished transitions |
 | Packaging | **Local web app now** (FastAPI serves the React build at `localhost`) → **Tauri/Electron wrap later** | Fast iteration first; native installer when proven |
@@ -78,6 +88,7 @@ Browser (React UI)  ⇄  FastAPI  ⇄  Pipeline stages  ⇄  Ollama (local model
 ```
 aeye/
 ├── aeye/                 # Python backend package
+│   ├── ingest.py         # yt-dlp URL resolver / local-file source
 │   ├── extract.py        # ffmpeg + scene detect + thumbnails
 │   ├── transcribe.py     # faster-whisper
 │   ├── vision.py         # Qwen2.5-VL captioning + OCR

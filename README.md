@@ -25,8 +25,9 @@ A-Eye is a fully-local tool that analyzes a video **visually, audibly, and throu
 Plenty of tools can "chat with a video" — but almost all of them are **cloud-based and transcript-only**. They read the captions and ignore the actual pixels. A-Eye is different:
 
 - **It watches the pixels**, not just the transcript — on-screen text, UI, slides, charts, scenes.
-- **It runs 100% locally.** Your videos never leave your machine.
+- **It runs 100% locally.** Your videos and questions never leave your machine.
 - **It fuses three signals** — vision + audio + text/subtitles — into one timestamped understanding you can question.
+- **Any source.** Load a local file *or* paste a **YouTube / Vimeo / web video link** (1000+ sites via `yt-dlp`) — links are downloaded locally, then analyzed exactly like any other video.
 
 ### Who it's for
 
@@ -37,17 +38,19 @@ Plenty of tools can "chat with a video" — but almost all of them are **cloud-b
 
 ## How it works
 
-A-Eye turns a video into a rich, timestamped document, then chats over it:
+Give A-Eye a local file or a video link; it turns the video into a rich, timestamped document, then chats over it:
 
 ```
-video ──▶ extract        ──▶ transcribe     ──▶ see            ──▶ index            ──▶ chat
-         (ffmpeg +           (faster-whisper)   (Qwen2.5-VL:        (timestamped        (ask anything,
-          scene detect,                          captions + OCR      structured doc)     answers cite
-          keyframes,                             over keyframes)                         timestamps)
-          thumbnails)
+link/file ──▶ ingest      ──▶ extract     ──▶ transcribe   ──▶ see          ──▶ index      ──▶ chat
+             (yt-dlp:         (ffmpeg +       (faster-         (Qwen2.5-VL:     (timestamped    (ask anything,
+              URL → local      scene detect,   whisper)         captions +       structured      answers cite
+              + captions),     keyframes,                       OCR over         doc)            timestamps)
+              or local file    thumbnails)                      keyframes)
 ```
 
 Models load and unload **sequentially** so the whole pipeline fits on a single consumer GPU. Full design in [`docs/architecture.md`](docs/architecture.md).
+
+> **Note on links:** A-Eye downloads the video locally and then analyzes it. You're responsible for complying with each platform's Terms of Service and applicable copyright law; A-Eye does not bypass DRM.
 
 ## Quickstart
 
@@ -72,7 +75,7 @@ python -m aeye serve            # opens http://localhost:8000
 | GPU       | ~8 GB VRAM (e.g. RTX 3060/3080) | Pipeline is designed around a 10 GB card |
 | RAM       | 16 GB (32 GB recommended) | Headroom for CPU offload |
 | Disk      | ~15 GB for models | Weights pulled at runtime, never committed |
-| Tools     | FFmpeg, Python 3.11+, Node 20+, Ollama | Cross-platform |
+| Tools     | FFmpeg, yt-dlp, Python 3.11+, Node 20+, Ollama | Cross-platform |
 
 ## Documentation
 

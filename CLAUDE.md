@@ -25,8 +25,9 @@ Full detail in [`docs/vision.md`](docs/vision.md). **Keep docs in sync with real
 
 ## Architecture (the pipeline)
 
-`extract → transcribe → see → index → chat` — see [`docs/architecture.md`](docs/architecture.md).
+`ingest → extract → transcribe → see → index → chat` — see [`docs/architecture.md`](docs/architecture.md).
 
+- **ingest** — source resolver. Local file passthrough, or **`yt-dlp`** to download a pasted **URL** (YouTube/Vimeo/1000+ sites) locally, plus platform captions/metadata. ToS/copyright is the user's responsibility; never bypass DRM. Fail gracefully on gated links.
 - **extract** — ffmpeg + PySceneDetect: keyframes, scrubber thumbnails (sprite + WebVTT), audio, subs.
 - **transcribe** — faster-whisper (large-v3-turbo), timestamped.
 - **see** — Qwen2.5-VL-7B (Apache-2.0): keyframe captions + OCR.
@@ -35,7 +36,7 @@ Full detail in [`docs/vision.md`](docs/vision.md). **Keep docs in sync with real
 
 ## Stack
 
-- Backend: **Python 3.11+ / FastAPI**. Models via **Ollama**. Media via **FFmpeg + PySceneDetect**.
+- Backend: **Python 3.11+ / FastAPI**. Models via **Ollama**. Media via **FFmpeg + PySceneDetect**. URL ingest via **yt-dlp**.
 - Frontend: **React + Vite + TailwindCSS + shadcn/ui**, Framer Motion, Lucide.
 - Packaging: **local web app now** (FastAPI serves the React build at localhost) → Tauri/Electron later.
 

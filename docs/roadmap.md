@@ -11,6 +11,7 @@ Phased so each stage is runnable before the next begins. Vision and UI are docum
 
 ## Phase 1 — Core pipeline (CLI, headless)
 The engine before the interface. Prove video → understanding → answer.
+- [ ] `ingest.py` — source resolver: local file passthrough + `yt-dlp` URL download (YouTube/Vimeo/web) with captions/metadata; graceful failure on DRM/gated links
 - [ ] `extract.py` — ffmpeg demux, PySceneDetect keyframes, thumbnails + WebVTT, subtitle extraction
 - [ ] `transcribe.py` — faster-whisper timestamped transcript
 - [ ] `vision.py` — Qwen2.5-VL keyframe captioning + OCR
@@ -19,7 +20,8 @@ The engine before the interface. Prove video → understanding → answer.
 - [ ] `cli.py` — `aeye analyze <video>` then ask a question
 
 ## Phase 2 — Local web app (the UI)
-- [ ] FastAPI server: upload/select video, stream chat (SSE), serve video + thumbnails
+- [ ] FastAPI server: upload/select video **or paste a URL**, stream chat (SSE), serve video + thumbnails
+- [ ] "Analyze this link" flow in the prompt input with download/ingest progress
 - [ ] React + Vite + Tailwind + shadcn/ui shell (dark + red theme tokens)
 - [ ] `SplitPane` (horizontal/vertical, draggable), `VideoView`
 - [ ] `TransportBar`: scrubber w/ thumbnail previews, red dial, transport + speed

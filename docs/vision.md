@@ -21,6 +21,8 @@ A-Eye **actually watches the video** and does it **locally**:
 
 These three streams are fused into a single **timestamped understanding** the user can interrogate. Answers cite the moment they came from, and clicking a citation jumps the video there.
 
+**Bring any source.** Load a local file or paste a **YouTube, Vimeo, or other web video link** — A-Eye downloads it locally (via `yt-dlp`, 1000+ sites) and analyzes it identically. When a platform provides captions or metadata, those are pulled in as extra signal. (Downloading is the user's responsibility under each platform's ToS; A-Eye doesn't bypass DRM.)
+
 ## Who it's for (personas)
 
 These are **system-prompt presets over one engine**, not separate products:

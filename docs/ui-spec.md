@@ -43,6 +43,7 @@ Global video controls, spanning both panes:
 - Rounded, floating "pill" spanning the bottom, centered.
 - Placeholder reflects context: *"Ask about this video…"*.
 - Send button + attach (load video) affordance; supports multi-line + streaming responses.
+- **Two ways to load a video:** drop/attach a local file, **or paste a video URL** (YouTube/Vimeo/web). When the input detects a pasted link with no video loaded yet, it switches to an "Analyze this link" action and shows download/ingest progress (resolved via `yt-dlp` — see [architecture.md](architecture.md)).
 
 ## Signature interaction — bidirectional timestamp sync
 

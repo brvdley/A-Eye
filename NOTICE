@@ -11,6 +11,13 @@ components and their licenses:
   - faster-whisper / OpenAI Whisper models .............. MIT
   - Qwen2.5-VL model weights ............................ Apache-2.0
   - FFmpeg (invoked as an external binary) .............. LGPL/GPL (per build)
+  - yt-dlp (URL ingestion) .............................. Unlicense (public domain)
 
 Users are responsible for complying with the licenses of any models and
 binaries they choose to download and run with A-Eye.
+
+Video URL ingestion: When a user supplies a link (e.g. YouTube, Vimeo),
+A-Eye uses yt-dlp to download the video to the local machine for analysis.
+The user is solely responsible for ensuring such downloads comply with the
+source platform's Terms of Service and applicable copyright law. A-Eye does
+not circumvent DRM or access controls.
