@@ -90,6 +90,10 @@ python -m aeye serve            # opens http://localhost:8000
 
 Early days — issues and ideas welcome. By contributing you agree your work is licensed under Apache-2.0.
 
+## Support
+
+A-Eye is free and open source, built in the open. If it's useful to you and you'd like to support continued development, you can [**sponsor the project on GitHub**](https://github.com/sponsors/brvdley) — entirely optional, and every bit helps.
+
 ## License
 
 [Apache License 2.0](LICENSE). A-Eye orchestrates third-party models at runtime under their own licenses and does not redistribute their weights — see [`NOTICE`](NOTICE).
