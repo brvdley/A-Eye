@@ -9,16 +9,17 @@ Phased so each stage is runnable before the next begins. Vision and UI are docum
 - [x] Git init + first push to GitHub
 - [ ] `pyproject.toml` / `requirements.txt` skeleton
 
-## Phase 1 — Core pipeline (CLI, headless)
-The engine before the interface. Prove video → understanding → answer.
-- [ ] `ingest.py` — source resolver: local file passthrough + `yt-dlp` URL download (YouTube/Vimeo/web) with captions/metadata; graceful failure on DRM/gated links
-- [ ] `extract.py` — ffmpeg demux, PySceneDetect keyframes, thumbnails + WebVTT, subtitle extraction
-- [ ] `transcribe.py` — faster-whisper timestamped transcript
-- [ ] `providers/` — provider interface for the See/Chat stages, with the local `OllamaProvider` first (cloud providers come in Phase 3)
-- [ ] `vision.py` — keyframe captioning + OCR via the provider interface
-- [ ] `index.py` — assemble timestamped structured document (+ caching)
-- [ ] `chat.py` — single-turn Q&A over the indexed doc with timestamp citations
-- [ ] `cli.py` — `aeye analyze <video>` then ask a question
+## Phase 1 — Core pipeline (CLI, headless) ✅
+The engine before the interface. Prove video → understanding → answer. **Done — runs fully local end-to-end.**
+- [x] `ingest.py` — source resolver: local file passthrough + `yt-dlp` URL download (YouTube/Vimeo/web) with captions/metadata; graceful failure on DRM/gated links
+- [x] `extract.py` — ffmpeg (system or bundled) audio + scene-detect keyframes (interval fallback) + sidecar subtitle parsing
+- [x] `transcribe.py` — faster-whisper timestamped transcript (GPU→CPU fallback)
+- [x] `providers/` — provider interface for the See/Chat stages, with the local `OllamaProvider` first (cloud providers come in Phase 3)
+- [x] `vision.py` — keyframe captioning + OCR via the provider interface
+- [x] `index.py` — assemble timestamped structured document (+ save/load cache)
+- [x] `chat.py` — single-turn Q&A over the indexed doc with timestamp citations
+- [x] `cli.py` — `aeye ask <video> "<question>"` (+ `ingest`/`extract`/`transcribe`)
+- [ ] Scrubber thumbnails (sprite + WebVTT) — deferred to Phase 2 (UI asset, not needed for analysis)
 
 ## Phase 2 — Local web app (the UI)
 - [ ] FastAPI server: upload/select video **or paste a URL**, stream chat (SSE), serve video + thumbnails
