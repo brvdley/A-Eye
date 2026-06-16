@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aeye"
+version = "0.1.0.dev0"
+description = "Watch any video with an AI that actually sees it — fully local, with optional BYOK cloud models."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [{ name = "A-Eye contributors" }]
+keywords = ["video", "ai", "local-llm", "multimodal", "whisper", "ollama", "vision"]
+
+# Core deps — enough for the foundation + the ingest stage. Heavier, stage-specific
+# deps live in the optional groups below so a plain install stays light.
+dependencies = [
+  "yt-dlp>=2024.8.6",
+  "pydantic>=2.6",
+  "pydantic-settings>=2.2",
+  "httpx>=0.27",
+  "typer>=0.12",
+  "rich>=13.7",
+]
+
+[project.optional-dependencies]
+# Extract stage helpers (ffmpeg is an external binary, installed separately).
+media = ["scenedetect>=0.6.4", "pillow>=10.0"]
+# Transcribe stage. NOTE: faster-whisper / CTranslate2 wheels lag new Python
+# releases — use a Python 3.12 venv if 3.13/3.14 can't resolve these.
+transcribe = ["faster-whisper>=1.0"]
+# Local web app (Phase 2).
+server = ["fastapi>=0.110", "uvicorn[standard]>=0.29"]
+# Optional BYOK cloud providers (Phase 3) — see docs/providers.md.
+cloud = ["anthropic>=0.40", "openai>=1.40"]
+all = ["aeye[media,transcribe,server,cloud]"]
+
+[project.urls]
+Homepage = "https://github.com/brvdley/A-Eye"
+Repository = "https://github.com/brvdley/A-Eye"
+
+[project.scripts]
+aeye = "aeye.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["aeye"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

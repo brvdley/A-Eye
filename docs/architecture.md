@@ -29,6 +29,7 @@ The pipeline runs **once per video** (the "index" pass) to produce a compact, ti
    - **Local file:** used as-is.
    - **URL** (YouTube, Vimeo, 1000+ sites): downloaded locally with `yt-dlp`. Also fetches **platform captions** and **metadata** (title, description, chapters) when available — extra text signal for the Index stage.
    - Fails gracefully on DRM-protected / geo- or age-gated links that can't be retrieved.
+   - **YouTube reliability:** modern yt-dlp needs a JS runtime (deno or `--js-runtimes node`) and, when YouTube's anti-bot blocks anonymous access, **browser cookies** (`AEYE_COOKIES_FROM_BROWSER=chrome|edge|firefox|...`). Direct/most other sources need neither. This is an environmental dependency, not a code path.
    - **ToS/copyright:** downloading is the user's responsibility; A-Eye doesn't bypass DRM. See [`NOTICE`](../NOTICE).
 
 1. **Extract** (`aeye/extract.py`) — CPU only.
