@@ -28,6 +28,11 @@ class Settings(BaseSettings):
     # Transcription (faster-whisper).
     whisper_model: str = "large-v3-turbo"
 
+    # Extract stage: keyframe sampling. Scene cuts drive keyframes; when few/none
+    # are found, fall back to one frame every ``keyframe_interval`` seconds.
+    keyframe_interval: float = 5.0
+    max_keyframes: int = 80
+
     # Provider selection per role: "ollama" (local) | "anthropic" | "openai".
     vision_provider: str = "ollama"
     chat_provider: str = "ollama"

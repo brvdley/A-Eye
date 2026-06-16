@@ -43,5 +43,30 @@ def ingest(
         rprint(f"  duration: {src.duration:.0f}s")
 
 
+@app.command()
+def extract(
+    source: str = typer.Argument(
+        ..., help="Local file path, or a video URL (YouTube/Vimeo/...)."
+    ),
+) -> None:
+    """Ingest a video, then extract audio + keyframes (+ sidecar subtitles)."""
+    from .extract import extract as extract_video
+
+    try:
+        src = ingest_video(source)
+        ext = extract_video(src)
+    except (FileNotFoundError, ValueError, RuntimeError) as exc:
+        rprint(f"[red]✗[/] {exc}")
+        raise typer.Exit(code=1) from exc
+
+    rprint(f"[green]✓[/] [bold]{src.title or src.path.name}[/]")
+    if ext.duration:
+        rprint(f"  duration:  {ext.duration:.1f}s")
+    rprint(f"  keyframes: {len(ext.keyframes)}")
+    rprint(f"  subtitles: {len(ext.subtitles)} cues")
+    rprint(f"  audio:     {ext.audio_path}")
+    rprint(f"  workdir:   {ext.workdir}")
+
+
 if __name__ == "__main__":
     app()

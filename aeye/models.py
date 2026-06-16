@@ -41,6 +41,16 @@ class Caption(BaseModel):
     ocr_text: str | None = None  # on-screen text, if any
 
 
+class Extraction(BaseModel):
+    """Artifacts produced by the extract stage (audio + keyframes + sidecar subs)."""
+
+    workdir: Path
+    audio_path: Path
+    duration: float | None = None
+    keyframes: list[Keyframe] = Field(default_factory=list)
+    subtitles: list[TranscriptSegment] = Field(default_factory=list)
+
+
 class IndexedVideo(BaseModel):
     """The cached, timestamped understanding the chat stage answers over."""
 

@@ -24,8 +24,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# Extract stage helpers (ffmpeg is an external binary, installed separately).
-media = ["scenedetect>=0.6.4", "pillow>=10.0"]
+# Extract stage. imageio-ffmpeg bundles a static ffmpeg binary so users don't
+# have to install one manually; a system ffmpeg on PATH is preferred when present.
+media = ["scenedetect>=0.6.4", "pillow>=10.0", "imageio-ffmpeg>=0.5", "opencv-python-headless>=4.9"]
 # Transcribe stage. NOTE: faster-whisper / CTranslate2 wheels lag new Python
 # releases — use a Python 3.12 venv if 3.13/3.14 can't resolve these.
 transcribe = ["faster-whisper>=1.0"]
